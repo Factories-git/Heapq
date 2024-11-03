@@ -1,51 +1,45 @@
-import heapq
-import sys
-def solution(operations):
-    que = []
-    max_que = []
-    heapq.heapify(que)
-    heapq.heapify(max_que)
+import heapq,sys
+from collections import Counter
+
+input = sys.stdin.readline
+
+min_pq = []
+max_pq = []
+heapq.heapify(min_pq)
+heapq.heapify(max_pq)
+
+def pop(heap,deletes):
+    while True:
+        s = heapq.heappop(heap)
+        if s in deletes:
+            heapq.heappush(heap, s)
+        else:
+            break
+    return heap
+
+
+def Dual_Prioirity_queue(max_heap,min_heap, operations, deletes):
     for i in operations:
         if i[0] == 'I':
-            l = list(i)
-            heapq.heappush(que,int(i[2:]))
-            heapq.heappush(max_que,-int(i[2:]))
-        elif i == 'D -1\n':
-            if que != []:
-                heapq.heappop(que)
-                heapq.heappop(max_que)
-        elif i == 'D 1\n':
-            heapq.heappop(max_que)
-            heapq.heapify(que)
-    if que != []:
-        return f'{max(max_que)} {min(que)}'
-    else:
-        return 'EMPTY'
-operations = []
-for i in range(int(input())):
-    for j in range(int(input())):
-        operations.append(sys.stdin.readline())
+            heapq.heappush(min_heap, int(i[1]))
+            heapq.heappush(max_heap, -int(i[1]))
+        elif i[0] == 'D':
+            if min_heap and max_heap:
+                if int(i[1]) < 0:
+                    d = heapq.heappop(min_heap)
+                    deletes.append(d)
+                    pop(max_heap, deletes)
+                else:
+                    d = -heapq.heappop(max_heap)
+                    deletes.append(d)
+                    pop(min_heap, deletes)
+    print(max_heap, min_heap, deletes)
+    return f'{max_heap[0]} {min_heap[0]}' if max_heap and min_heap else 'EMPTY'
 
-    sys.stdout.write(solution(operations))
 
-'''
-2
-7
-I 16
-I -5643
-D -1
-D 1
-D 1
-I 123
-D -1
-9
-I -45
-I 653
-D 1
-I -642
-I 45
-I 97
-D 1
-D -1
-I 333
-'''
+for _ in range(int(input())):
+    operation = []
+    delete = []
+    for i in range(int(input())):
+        operation.append(list(map(str ,input().split())))
+    print(Dual_Prioirity_queue(max_pq, min_pq, operation, delete))
