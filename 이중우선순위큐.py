@@ -1,7 +1,6 @@
-'''
+"""
 12% 틀렸습니다
-
-'''
+"""
 
 import heapq
 
@@ -43,8 +42,8 @@ for _ in range(int(input())):
             if max_pq and min_pq:
                 if int(operation[1]) == 1:
                     erase(pop(max_pq))
-                    synchronize(min_pq, buffer)
                 else:
                     erase(pop(min_pq))
-                    synchronize(max_pq, buffer)
+            synchronize(min_pq, buffer)
+            synchronize(max_pq, buffer)
     print(f'{-max_pq[0]} {min_pq[0]}' if max_pq and min_pq else 'EMPTY')
