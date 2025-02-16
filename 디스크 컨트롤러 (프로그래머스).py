@@ -1,4 +1,5 @@
 import heapq
+#미완성 버전
 
 def solution(jobs):
     answer = 0
